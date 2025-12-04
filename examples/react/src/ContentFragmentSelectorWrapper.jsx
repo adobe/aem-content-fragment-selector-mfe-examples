@@ -12,9 +12,11 @@
  */
 
 import React from "react";
+import FragmentSelector from "./FragmentSelector";
 import { withPropsReceiver } from "@assets/microfrontend";
 import withEverything from "../../utils/withProviders";
-import { ContentFragmentSelectorProps, FragmentSelector } from "@aem-sites/content-fragment-selector";
+import { initializeModuleRuntime } from "../../utils/moduleRuntime";
+import { ContentFragmentSelectorProps } from "@aem-sites/content-fragment-selector";
 
 /**
  * @class
@@ -22,53 +24,43 @@ import { ContentFragmentSelectorProps, FragmentSelector } from "@aem-sites/conte
 export class ContentFragmentSelectorWrapper extends React.Component {
     constructor(props) {
         super(props);
-        this.selectorInstance = React.createRef(); // Create a ref for the FragmentSelector
+        this.state = {
+            loading: true,
+        };
     }
 
-    reload() {
-        if (this.selectorInstance.current) {
-            this.selectorInstance.current.reload(); // Call the reload method on the FragmentSelector instance
+    initializeModuleRuntime = async () => {
+        if (this.props.runningInUnifiedShell) {
+            // todo fix
+            await initializeModuleRuntime();
         }
+        this.setState({ loading: false });
     };
 
+    componentDidMount() {
+        this.initializeModuleRuntime();
+    }
+
     render() {
+        if (this.state.loading) return null;
         return (
             <div data-testid="FragmentSelector">
                 <FragmentSelector
-                  ref={this.selectorInstance}
-                  imsToken={ this.props.imsToken }
-                  repoId={ this.props.repoId }
-                  {...(this.props.defaultRepoId && {
-                      defaultRepoId: this.props?.defaultRepoId,
-                  })}
-                  orgId={this.props.orgId}
-                  locale={this.props.locale ?? "en-US"}
-                  env={this.props.env}
-                  filters={
-                    this.props.filters ?? {}
-                  }
-                  isOpen={this.props.isOpen}
-                  noWrap={this.props.noWrap}
-                  theme={this.props?.theme ?? "light"}
-                  selectionType={this.props.selectionType ?? "multiple"}
-                  {...(this.props.dialogSize && {
-                      dialogSize: this.props.dialogSize,
-                  })}
-                  runningInUnifiedShell={this.props.runningInUnifiedShell ?? true}
-                  readonlyFilters={
-                    this.props.readonlyFilters ?? []
-                  }
-                  selectedFragments={this.props.selectedFragments ?? []}
-                  hipaaEnabled={this.props?.hipaaEnabled ?? false}
-                  inventoryView={this.props.inventoryView}
-                  inventoryViewToggleEnabled={
-                    this.props.inventoryViewToggleEnabled ?? false
-                  }
-                  onDismiss={this.props.onDismiss}
-                  onSubmit={(data) => console.log("On Submit payload:", data)}
-                  onSelectionChange={(data) => {
-                      console.log("On selection change payload:", data);
-                  }}
+                    imsToken={this.props.imsToken}
+                    imsOrg={this.props.orgId}
+                    locale={this.props.locale}
+                    repo={this.props.repoId}
+                    filters={this.props.filters}
+                    isOpen={this.props.isOpen}
+                    onDismiss={this.props.onDismiss}
+                    onSubmit={this.props.onSubmit}
+                    env={this.props.env}
+                    maxItems={
+                        this.props.selectionType === "single" ? 1 : undefined
+                    }
+                    dialogSize={this.props.dialogSize}
+                    theme={this.props.theme}
+                    readonlyFilters={this.props.readonlyFilters}
                 />
             </div>
         );
