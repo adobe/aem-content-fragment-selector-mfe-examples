@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>testing-cf-mfe-integration-with-3rd-party-app</title>
+    <script id="content-fragments-selector" src="https://experience-qa.adobe.com/solutions/CQ-sites-content-fragment-selector/static-assets/resources/content-fragment-selector.js"></script>
+    <script>
+      const imsProps = {
+        imsClientId: "exc_app",
+        imsScope: "additional_info.projectedProductContext, AdobeID, openid, read_organizations,",
+        redirectUrl: window.location.href,
+        onImsServiceInitialized: (service) => {
+          // invoked when the ims service is initialized and is ready
+          console.log("onImsServiceInitialized", service);
+        },
+        onAccessTokenReceived: (token) => {
+          console.log("onAccessTokenReceived", token);
+        },
+        onAccessTokenExpired: () => {
+          console.log("onAccessTokenError");
+          // re-trigger sign-in flow
+        },
+        onErrorReceived: (type, msg) => {
+          console.log("onErrorReceived", type, msg);
+        },
+      }
+
+      function load() {
+        const registeredTokenService = PureJSSelectors.registerContentFragmentSelectorAuthService(imsProps);
+        imsInstance = registeredTokenService;
+      };
+
+      // initialize the IMS flow before attempting to render the content fragment selector
+      load();
+
+
+      // function that will render the content fragment selector
+      function renderContentFragmentSelectorWithAuthFlow() {
+        const contentFragmentSelectorDialog = document.getElementById('content-fragment-selector-dialog');
+
+        const contentFragmentSelectorProps = {
+          inventoryViewToggleEnabled: true,
+          isOpen: true,
+          noWrap: false,
+          orgId: "908936ED5D35CC220A495CD4@AdobeOrg",
+          // repoId: "author-p147881-e1511073.adobeaemcloud.com", // if wanted to restrict to a specific repo
+          runningInUnifiedShell: false,
+          onDismiss: () => contentFragmentSelectorDialog.close(),
+          onSubmit:
+            ({ contentFragments }) => {
+              const selectedContentFragment = contentFragments[0];
+              alert(selectedContentFragment.path);
+            },
+        }
+        // container element on which you want to render the ContentFragmentSelector component
+        const container = document.getElementById('content-fragment-selector');
+
+        /// Use the PureJSSelectors in globals to render the ContentFragmentSelector component
+        PureJSSelectors.renderContentFragmentSelectorWithAuthFlow(container, contentFragmentSelectorProps, () => contentFragmentSelectorDialog.showModal());
+      }
+    </script>
+</head>
+<body>
+<div>
+    <button onclick="renderContentFragmentSelectorWithAuthFlow()">Content Fragment Selector - Select Content Fragments with Ims Flow</button>
+</div>
+<dialog id="content-fragment-selector-dialog">
+    <div id="content-fragment-selector" style="height: calc(100vh - 80px); width: calc(100vw - 60px); margin: -20px;">
+    </div>
+</dialog>
+</div>
+</body>
+</html>
