@@ -28,7 +28,7 @@
       }
 
       function load() {
-        const registeredTokenService = PureJSSelectors.registerContentFragmentSelectorAuthService(imsProps);
+        const registeredTokenService = PureJSContentFragmentSelectors.registerContentFragmentSelectorAuthService(imsProps);
         imsInstance = registeredTokenService;
       };
 
@@ -57,8 +57,8 @@
         // container element on which you want to render the ContentFragmentSelector component
         const container = document.getElementById('content-fragment-selector');
 
-        /// Use the PureJSSelectors in globals to render the ContentFragmentSelector component
-        PureJSSelectors.renderContentFragmentSelectorWithAuthFlow(container, contentFragmentSelectorProps, () => contentFragmentSelectorDialog.showModal());
+        /// Use the PureJSContentFragmentSelectors in globals to render the ContentFragmentSelector component
+        PureJSContentFragmentSelectors.renderContentFragmentSelectorWithAuthFlow(container, contentFragmentSelectorProps, () => contentFragmentSelectorDialog.showModal());
       }
     </script>
 </head>
