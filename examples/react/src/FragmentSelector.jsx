@@ -86,7 +86,7 @@ const FragmentSelector: FC<Props> = ({
         imsOrg: imsOrg,
         imsToken: imsToken,
         tenant,
-        apiKey: "exc_app",
+        apiKey: "<IMS_CLIENT_ID>",
         locale: locale,
         basePath: "", // default value for basePath
         imsProfile: {} as any, // default value for imsProfile

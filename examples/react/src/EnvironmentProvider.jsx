@@ -16,11 +16,11 @@ import { registerContentFragmentSelectorAuthService } from './ContentFragmentSel
 
 export const EnvironmentContext = React.createContext({});
 
-const stageImsClientId = 'exc_app';
-const stageImsOrg = "8C6043F15F43B6390A49401A@AdobeOrg";
+const stageImsClientId = '<IMS_CLIENT_ID>';
+const stageImsOrg = "YOUR_STAGE_ORG_ID@AdobeOrg";
 
-const prodImsClientId = 'exc_app';
-const prodImsOrg = '908936ED5D35CC220A495CD4@AdobeOrg';
+const prodImsClientId = '<IMS_CLIENT_ID>';
+const prodImsOrg = 'YOUR_PROD_ORG_ID@AdobeOrg';
 
 const initImsAuthInfo = {
   env: 'prod',

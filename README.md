@@ -26,6 +26,8 @@ Content Fragment Selector is a Content Fragments Console component from [Adobe E
 
 This GitHub repository contains usage examples for the Content Fragment Selectors' JavaScript APIs in various frameworks/libraries like Vanilla JavaScript and React. The JavaScript APIs enable you to conveniently integrate the Content Fragment Selector, which is a component from Adobe Experience Manager as a Headless CMS (AEM CS) into your application and support functions such as searching, browsing, filtering, selecting content fragments from the AEM CS repository and more.
 
+![content-fragment-selector-high-level-flow](./docs/content-fragment-selector-flow.png)
+
 <img width="1920" alt="Content Fragment Selector" src="./docs/content-fragment-selector-demo.png">
 
 ## Installation
@@ -237,8 +239,8 @@ root.render(<App />);
 
 ```javascript
 const TestComponent = () => {
-    const repoId = "author-p77504-e175976-cmstg.adobeaemcloud.com";
-    const orgId = "8C6043F15F43B6390A49401A@AdobeOrg";
+    const repoId = "author-p12345-e67890.adobeaemcloud.com";
+    const orgId = "YOUR_ORG_ID@AdobeOrg";
     const [isOpen, setIsOpen] = React.useState(false);
     const { imsOrg, imsToken } = serviceConfig.getAuth() || {};
     const selectorInstance = useRef();
@@ -256,7 +258,7 @@ const TestComponent = () => {
                 orgId={imsOrg}
                 imsToken={imsToken}
                 repoId={repoId}
-                allowedRepositoryIds={["author-p77504-e175976-cmstg.adobeaemcloud.com", "author-p12345-e67890-prod.adobeaemcloud.com"]}
+                allowedRepositoryIds={["author-p12345-e67890.adobeaemcloud.com", "author-p11111-e22222.adobeaemcloud.com"]}
                 defaultRepoId="default-repo-id"
                 locale="en-US"
                 env="PROD"
@@ -311,12 +313,12 @@ const TestComponent = () => {
 
 ```javascript
 const TestComponent = () => {
-    const repoId = "author-p77504-e175976-cmstg.adobeaemcloud.com";
-    const orgId = "8C6043F15F43B6390A49401A@AdobeOrg";
+    const repoId = "author-p12345-e67890.adobeaemcloud.com";
+    const orgId = "YOUR_ORG_ID@AdobeOrg";
     const [isOpen, setIsOpen] = React.useState(false);
     
     const imsSusiData = {
-        imsClientId: "exc_app",
+        imsClientId: "<IMS_CLIENT_ID>",
         imsScope:
             "AdobeID,openid,read_organizations,additional_info.projectedProductContext",
         redirectUrl: window.location.href,
@@ -346,7 +348,7 @@ const TestComponent = () => {
                 </ActionButton>
                 <ContentFragmentSelectorWithAuthFlow
                     repoId={repoId}
-                    allowedRepositoryIds={["author-p77504-e175976-cmstg.adobeaemcloud.com", "author-p12345-e67890-prod.adobeaemcloud.com"]}
+                    allowedRepositoryIds={["author-p12345-e67890.adobeaemcloud.com", "author-p11111-e22222.adobeaemcloud.com"]}
                     defaultRepoId="default-repo-id"
                     orgId={orgId}
                     locale="en-US"

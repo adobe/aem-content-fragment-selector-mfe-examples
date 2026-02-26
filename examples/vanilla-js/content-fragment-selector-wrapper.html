@@ -8,8 +8,8 @@
     <script id="content-fragments-selector" src="https://experience-qa.adobe.com/solutions/CQ-sites-content-fragment-selector/static-assets/resources/content-fragment-selector.js"></script>
     <script>
       const imsProps = {
-        imsClientId: "exc_app",
-        imsScope: "additional_info.projectedProductContext, AdobeID, openid, read_organizations,",
+        imsClientId: "<IMS_CLIENT_ID>",
+        imsScope: "additional_info.projectedProductContext, AdobeID, openid, read_organizations",
         redirectUrl: window.location.href,
         onImsServiceInitialized: (service) => {
           // invoked when the ims service is initialized and is ready
@@ -44,8 +44,8 @@
           inventoryViewToggleEnabled: true,
           isOpen: true,
           noWrap: false,
-          orgId: "908936ED5D35CC220A495CD4@AdobeOrg",
-          // repoId: "author-p147881-e1511073.adobeaemcloud.com", // if wanted to restrict to a specific repo
+          orgId: "YOUR_ORG_ID@AdobeOrg",
+          // repoId: "author-p12345-e67890.adobeaemcloud.com", // if wanted to restrict to a specific repo
           runningInUnifiedShell: false,
           onDismiss: () => contentFragmentSelectorDialog.close(),
           onSubmit:
