@@ -49,7 +49,7 @@ type ContentFragmentModel = {
 | `path` | string | Yes | Full path to the fragment in the DAM (e.g., `/content/dam/my-project/article-fragment`) |
 | `title` | string | Yes | Display title of the content fragment |
 | `model` | ContentFragmentModel | Yes | Complete Content Fragment Model information |
-| `variations` | string[] | Yes | Array of variation names available for this fragment (e.g., `["master", "mobile", "tablet"]`) |
+| `variations` | string[] | Yes | Array of selected variation names for this fragment. Returns `[]` if the main variation is selected (e.g., `["mobile", "tablet"]`) |
 | `status` | string | Yes | Publication status of the fragment (e.g., "PUBLISHED", "MODIFIED", "DRAFT", "NEW", "UNPUBLISHED") |
 | `publishedBy` | string | Yes | Email/username of the user who published the fragment |
 | `publishedByFullName` | string | Yes | Full name of the user who published the fragment |
@@ -119,7 +119,7 @@ PureJSContentFragmentSelectors.renderContentFragmentSelectorWithAuthFlow(
                 path: "/conf/my-project/settings/dam/cfm/models/article",
                 tagIds: ["tag:product", "tag:news"]
             },
-            variations: ["master", "mobile", "tablet"],
+            variations: ["mobile", "tablet"],
             status: "PUBLISHED",
             publishedBy: "publisher@adobe.com",
             publishedByFullName: "Jane Publisher",
@@ -141,7 +141,7 @@ PureJSContentFragmentSelectors.renderContentFragmentSelectorWithAuthFlow(
                 path: "/conf/my-project/settings/dam/cfm/models/blog-post",
                 tagIds: ["tag:blog"]
             },
-            variations: ["master"],
+            variations: [],
             status: "MODIFIED",
             publishedBy: "user@adobe.com",
             publishedByFullName: "John Doe",
