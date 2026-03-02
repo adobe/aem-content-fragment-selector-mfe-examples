@@ -1,0 +1,20 @@
+{
+    "name": "aem-content-fragment-selector-mfe-examples",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Usage examples for the Content Fragment Selector JavaScript APIs",
+    "scripts": {
+        "lint": "eslint 'examples/**/*.{js,ts,tsx}' --fix",
+        "lint:check": "eslint 'examples/**/*.{js,ts,tsx}'"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^7.0.0",
+        "@typescript-eslint/parser": "^7.0.0",
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.1.3",
+        "eslint-plugin-react": "^7.33.2",
+        "prettier": "^3.2.5",
+        "typescript": "^5.3.3"
+    }
+}
