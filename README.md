@@ -7,18 +7,18 @@ Content Fragment Selector is a Content Fragments Console component from [Adobe E
 - [What is this repository for](#what-is-this-repository-for)
 - [Installation](#installation)
 - [APIs](#apis)
-  - [PureJSContentFragmentSelectors.`renderContentFragmentSelector` or `<ContentFragmentSelector/>`](#purejscontentfragmentselectorsrendercontentfragmentselector-or-contentfragmentselector)
-  - [PureJSContentFragmentSelectors.`renderContentFragmentSelectorWithAuthFlow` or `<ContentFragmentSelectorWithAuthFlow/>`](#purejscontentfragmentselectorsrendercontentfragmentselectorwithauthflow-or-contentfragmentselectorwithauthflow-)
-  - [PureJSContentFragmentSelectors.`registerContentFragmentSelectorAuthService`](#purejscontentfragmentselectorsregistercontentfragmentselectorauthservice)
+    - [PureJSContentFragmentSelectors.`renderContentFragmentSelector` or `<ContentFragmentSelector/>`](#purejscontentfragmentselectorsrendercontentfragmentselector-or-contentfragmentselector)
+    - [PureJSContentFragmentSelectors.`renderContentFragmentSelectorWithAuthFlow` or `<ContentFragmentSelectorWithAuthFlow/>`](#purejscontentfragmentselectorsrendercontentfragmentselectorwithauthflow-or-contentfragmentselectorwithauthflow-)
+    - [PureJSContentFragmentSelectors.`registerContentFragmentSelectorAuthService`](#purejscontentfragmentselectorsregistercontentfragmentselectorauthservice)
 - [Examples](#examples)
-  - [JavaScript - UMD](#example---javascript)
-  - [JavaScript - ESM](#example---importmap-via-esm-cdn)
-  - [React](#example---react-with-importmap-via-esm-cdn)
+    - [JavaScript - UMD](#example---javascript)
+    - [JavaScript - ESM](#example---importmap-via-esm-cdn)
+    - [React](#example---react-with-importmap-via-esm-cdn)
 - Supported Properties
-  - [ContentFragmentSelector Props](./docs/ContentFragmentSelectorProps.md)
-  - [ContentFragmentSelection Type](./docs/ContentFragmentSelection.md)
-  - [ImsAuthProps](./docs/ImsAuthProps.md)
-  - [ImsAuthService](./docs/ImsAuthService.md)
+    - [ContentFragmentSelector Props](./docs/ContentFragmentSelectorProps.md)
+    - [ContentFragmentSelection Type](./docs/ContentFragmentSelection.md)
+    - [ImsAuthProps](./docs/ImsAuthProps.md)
+    - [ImsAuthService](./docs/ImsAuthService.md)
 - [Contributing](#contributing)
 - [Licensing](#licensing)
 
@@ -37,28 +37,29 @@ This GitHub repository contains usage examples for the Content Fragment Selector
 - Program ID and Environment ID for the AEM CS instance
 - Domain names where the integrating application is hosted
 
-After provisioning, your organization will be provided with an `imsClientId`, `imsScope`, and a `redirectUrl` corresponding to the environment that you request — which are essential for the configuration of the Content Fragment Selector to work end-to-end. Without those valid properties, you will not be able to integrate with the Content Fragment Selector. 
+After provisioning, your organization will be provided with an `imsClientId`, `imsScope`, and a `redirectUrl` corresponding to the environment that you request — which are essential for the configuration of the Content Fragment Selector to work end-to-end. Without those valid properties, you will not be able to integrate with the Content Fragment Selector.
 
 ---
+
 The Content Fragment Selector is available via the following installation options:
 
 1. NPM Package
 
-   ```bash
-   npm install @aem-sites/content-fragment-selector
-   ```
+    ```bash
+    npm install @aem-sites/content-fragment-selector
+    ```
 
 2. And can be used in Deno/Webpack Module Federation like:
 
-   ```js
-   import { ContentFragmentSelector } from 'https://experience.adobe.com/solutions/CQ-content-fragments-selectors/static-content-fragments/resources/@content-fragments/selectors/index.js'
-   ```
+    ```js
+    import { ContentFragmentSelector } from 'https://experience.adobe.com/solutions/CQ-content-fragments-selectors/static-content-fragments/resources/@content-fragments/selectors/index.js';
+    ```
 
-   or inside your Adobe application like:
+    or inside your Adobe application like:
 
-   ```js
-   import { ContentFragmentSelector } from "@aem-sites/content-fragment-selector"
-   ```
+    ```js
+    import { ContentFragmentSelector } from '@aem-sites/content-fragment-selector';
+    ```
 
 > **Breaking Change (v4.0.0+):** The UMD build global object name has changed from `PureJSSelectors` to `PureJSContentFragmentSelectors` to avoid conflicts when using both MFE Assets and Content Fragment Selector in the same app. This is a breaking change only for consumers using the UMD build via script tag. ES module imports (React, Angular) are not affected. If you're upgrading from version 3.x or earlier, update your code to use `window.PureJSContentFragmentSelectors` instead of `window.PureJSSelectors`.
 
@@ -96,7 +97,7 @@ PureJSContentFragmentSelectors.renderContentFragmentSelector(container: HTMLElem
 
 Renders the ContentFragmentSelector component on the provided container element and accepts all of the properties described in the [ContentFragmentSelector Props](./docs/ContentFragmentSelectorProps.md). The ContentFragmentSelectorWithAuthFlow component extends the ContentFragmentSelector component to include an authentication flow. When there's no _`imsToken`_ present, the ContentFragmentSelectorWithAuthFlow component will show a _Adobe_ login flow to obtain the _imsToken_ and then render the ContentFragmentSelector component.
 
-> It is **recommended** that you call [_registerContentFragmentSelectorAuthService_](#purejscontentfragmentselectorsregistercontentfragmentselectorauthservice) on your page load before calling renderContentFragmentSelectorWithAuthFlow or `<ContentFragmentSelectorWithAuthFlow/>`. In the event where you cannot call _registerContentFragmentSelectorAuthService_,  you can supply [ImsAuthProps](./docs/ImsAuthProps.md) along with [ContentFragmentSelectorProps](./docs/ContentFragmentSelectorProps.md). However, that might not create a great user experience.
+> It is **recommended** that you call [_registerContentFragmentSelectorAuthService_](#purejscontentfragmentselectorsregistercontentfragmentselectorauthservice) on your page load before calling renderContentFragmentSelectorWithAuthFlow or `<ContentFragmentSelectorWithAuthFlow/>`. In the event where you cannot call _registerContentFragmentSelectorAuthService_, you can supply [ImsAuthProps](./docs/ImsAuthProps.md) along with [ContentFragmentSelectorProps](./docs/ContentFragmentSelectorProps.md). However, that might not create a great user experience.
 
 ###### Parameters
 
@@ -142,30 +143,33 @@ Content Fragment Selector UMD version exposes a global variable `PureJSContentFr
 
 ```js
 // 1. Include the CDN link in your script tag
-<script src="https://experience.adobe.com/solutions/CQ-sites-content-fragment-selector/static-assets/resources/content-fragment-selector.js"></script>
+<script src="https://experience.adobe.com/solutions/CQ-sites-content-fragment-selector/static-assets/resources/content-fragment-selector.js"></script>;
 
 // 2. Register the Content Fragment Selector Auth Service on document load
 // Note: it is recommended that you call registerContentFragmentSelectorAuthService before you call renderContentFragmentSelectorWithAuthFlow
 PureJSContentFragmentSelectors.registerContentFragmentSelectorAuthService({
     imsClientId: '<IMS_CLIENT_ID_ASSOCIATED_WITH_YOUR_AEM_CS_REPOSITORY>',
     imsScope: 'AdobeID,openid,additional_info.projectedProductContext,read_organizations',
-    redirectUri: window.location.href
+    redirectUri: window.location.href,
 });
 
 // 3. Render the ContentFragmentSelector component with built in auth flow
 const props = {
-    orgId: "your-aem-cs-repository-ims-org",
+    orgId: 'your-aem-cs-repository-ims-org',
     onSubmit: ({ contentFragments, domainName, repoId, deliveryRepos }) => {
         // contentFragments is of type ContentFragmentSelection
-        contentFragments.forEach(fragment => {
+        contentFragments.forEach((fragment) => {
             console.log('Fragment ID:', fragment.id);
             console.log('Fragment Path:', fragment.path);
             console.log('Fragment Title:', fragment.title);
         });
-    }
-}
+    },
+};
 
-PureJSContentFragmentSelectors.renderContentFragmentSelectorWithAuthFlow(document.getElementById('content-fragment-selector-container'), props);
+PureJSContentFragmentSelectors.renderContentFragmentSelectorWithAuthFlow(
+    document.getElementById('content-fragment-selector-container'),
+    props
+);
 ```
 
 ```html
@@ -229,7 +233,7 @@ Content Fragment Selector ESM CDN version also exposes `ContentFragmentSelector`
 
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);
-  
+
 </script>
 ```
 
@@ -239,12 +243,12 @@ root.render(<App />);
 
 ```javascript
 const TestComponent = () => {
-    const repoId = "author-p12345-e67890.adobeaemcloud.com";
-    const orgId = "YOUR_ORG_ID@AdobeOrg";
+    const repoId = 'author-p12345-e67890.adobeaemcloud.com';
+    const orgId = 'YOUR_ORG_ID@AdobeOrg';
     const [isOpen, setIsOpen] = React.useState(false);
     const { imsOrg, imsToken } = serviceConfig.getAuth() || {};
     const selectorInstance = useRef();
-    
+
     // Use this function as callback for buttons or other events to trigger reload of Fragments Table
     const reload = useCallback(() => {
         selectorInstance?.current?.reload?.();
@@ -258,37 +262,38 @@ const TestComponent = () => {
                 orgId={imsOrg}
                 imsToken={imsToken}
                 repoId={repoId}
-                allowedRepositoryIds={["author-p12345-e67890.adobeaemcloud.com", "author-p11111-e22222.adobeaemcloud.com"]}
+                allowedRepositoryIds={[
+                    'author-p12345-e67890.adobeaemcloud.com',
+                    'author-p11111-e22222.adobeaemcloud.com',
+                ]}
                 defaultRepoId="default-repo-id"
                 locale="en-US"
                 env="PROD"
                 isOpen={isOpen}
                 filters={{
-                    folder: "/content/dam",
-                    status: ["PUBLISHED", "MODIFIED"],
+                    folder: '/content/dam',
+                    status: ['PUBLISHED', 'MODIFIED'],
                     tag: [
-                            {
-                                id: "1:",
-                                name: "1",
-                                path: "/content/cq:tags/1",
-                                description: "",
-                            },
-                        ],
+                        {
+                            id: '1:',
+                            name: '1',
+                            path: '/content/cq:tags/1',
+                            description: '',
+                        },
+                    ],
                 }}
                 readonlyFilters={[
-                    { status: ["PUBLISHED", "MODIFIED"] },
+                    { status: ['PUBLISHED', 'MODIFIED'] },
                     {
                         tag: [
                             {
-                                id: "1:",
-                                name: "1",
+                                id: '1:',
+                                name: '1',
                             },
                         ],
                     },
                 ]}
-                selectedFragments={[
-                    { id: "fragment1", path: "/content/dam/fragment1" },
-                ]}
+                selectedFragments={[{ id: 'fragment1', path: '/content/dam/fragment1' }]}
                 noWrap={false}
                 theme="light"
                 selectionType="multiple"
@@ -298,10 +303,28 @@ const TestComponent = () => {
                 inventoryViewToggleEnabled={true}
                 onDismiss={() => setIsOpen(false)}
                 onSubmit={({ contentFragments, domainName, tenantInfo, repoId, deliveryRepos }) =>
-                    console.log("On Submit payload:", { contentFragments, domainName, tenantInfo, repoId, deliveryRepos })
+                    console.log('On Submit payload:', {
+                        contentFragments,
+                        domainName,
+                        tenantInfo,
+                        repoId,
+                        deliveryRepos,
+                    })
                 }
-                onSelectionChange={({ contentFragments, domainName, tenantInfo, repoId, deliveryRepos }) => {
-                    console.log("On selection change payload:", { contentFragments, domainName, tenantInfo, repoId, deliveryRepos });
+                onSelectionChange={({
+                    contentFragments,
+                    domainName,
+                    tenantInfo,
+                    repoId,
+                    deliveryRepos,
+                }) => {
+                    console.log('On selection change payload:', {
+                        contentFragments,
+                        domainName,
+                        tenantInfo,
+                        repoId,
+                        deliveryRepos,
+                    });
                 }}
             />
         </DialogTrigger>
@@ -313,89 +336,107 @@ const TestComponent = () => {
 
 ```javascript
 const TestComponent = () => {
-    const repoId = "author-p12345-e67890.adobeaemcloud.com";
-    const orgId = "YOUR_ORG_ID@AdobeOrg";
+    const repoId = 'author-p12345-e67890.adobeaemcloud.com';
+    const orgId = 'YOUR_ORG_ID@AdobeOrg';
     const [isOpen, setIsOpen] = React.useState(false);
-    
+
     const imsSusiData = {
-        imsClientId: "<IMS_CLIENT_ID>",
-        imsScope:
-            "AdobeID,openid,read_organizations,additional_info.projectedProductContext",
+        imsClientId: '<IMS_CLIENT_ID>',
+        imsScope: 'AdobeID,openid,read_organizations,additional_info.projectedProductContext',
         redirectUrl: window.location.href,
         adobeImsOptions: {
             useLocalStorage: true,
         },
         modalMode: true,
-        env: "PROD",
+        env: 'PROD',
     };
 
     const { imsAuthService } = useImsAuthFlow({ ...imsSusiData });
 
     return (
         <DialogTrigger type="fullscreen" isOpen={isOpen}>
-                <ActionButton
-                    onPress={async () => {
-                        try {
-                            await imsAuthService?.triggerAuthFlow().then(() => {
-                                setIsOpen(true);
-                            });
-                        } catch (error) {
-                            console.error("Error signing in: ", error);
-                        }
-                    }}
-                >
-                    Show Selector
-                </ActionButton>
-                <ContentFragmentSelectorWithAuthFlow
-                    repoId={repoId}
-                    allowedRepositoryIds={["author-p12345-e67890.adobeaemcloud.com", "author-p11111-e22222.adobeaemcloud.com"]}
-                    defaultRepoId="default-repo-id"
-                    orgId={orgId}
-                    locale="en-US"
-                    env="PROD"
-                    isOpen={isOpen}
-                    filters={{
-                        folder: "/content/dam",
-                        status: ["PUBLISHED", "MODIFIED"],
+            <ActionButton
+                onPress={async () => {
+                    try {
+                        await imsAuthService?.triggerAuthFlow().then(() => {
+                            setIsOpen(true);
+                        });
+                    } catch (error) {
+                        console.error('Error signing in: ', error);
+                    }
+                }}
+            >
+                Show Selector
+            </ActionButton>
+            <ContentFragmentSelectorWithAuthFlow
+                repoId={repoId}
+                allowedRepositoryIds={[
+                    'author-p12345-e67890.adobeaemcloud.com',
+                    'author-p11111-e22222.adobeaemcloud.com',
+                ]}
+                defaultRepoId="default-repo-id"
+                orgId={orgId}
+                locale="en-US"
+                env="PROD"
+                isOpen={isOpen}
+                filters={{
+                    folder: '/content/dam',
+                    status: ['PUBLISHED', 'MODIFIED'],
+                    tag: [
+                        {
+                            id: '1:',
+                            name: '1',
+                            path: '/content/cq:tags/1',
+                            description: '',
+                        },
+                    ],
+                }}
+                readonlyFilters={[
+                    { status: ['PUBLISHED', 'MODIFIED'] },
+                    {
                         tag: [
                             {
-                                id: "1:",
-                                name: "1",
-                                path: "/content/cq:tags/1",
-                                description: "",
+                                id: '1:',
+                                name: '1',
                             },
                         ],
-                    }}
-                    readonlyFilters={[
-                        { status: ["PUBLISHED", "MODIFIED"] },
-                        {
-                            tag: [
-                                {
-                                    id: "1:",
-                                    name: "1",
-                                },
-                            ],
-                        },
-                    ]}
-                    selectedFragments={[
-                        { id: "fragment1", path: "/content/dam/fragment1" },
-                    ]}
-                    noWrap={false}
-                    theme="light"
-                    selectionType="multiple"
-                    dialogSize="fullscreen"
-                    hipaaEnabled={false}
-                    inventoryView="table"
-                    inventoryViewToggleEnabled={true}
-                    onDismiss={() => setIsOpen(false)}
-                    onSubmit={({ contentFragments, domainName, tenantInfo, repoId, deliveryRepos }) =>
-                        console.log("On Submit payload:", { contentFragments, domainName, tenantInfo, repoId, deliveryRepos })
-                    }
-                    onSelectionChange={({ contentFragments, domainName, tenantInfo, repoId, deliveryRepos }) => {
-                        console.log("On selection change payload:", { contentFragments, domainName, tenantInfo, repoId, deliveryRepos });
-                    }}
-                />
-            </DialogTrigger>
+                    },
+                ]}
+                selectedFragments={[{ id: 'fragment1', path: '/content/dam/fragment1' }]}
+                noWrap={false}
+                theme="light"
+                selectionType="multiple"
+                dialogSize="fullscreen"
+                hipaaEnabled={false}
+                inventoryView="table"
+                inventoryViewToggleEnabled={true}
+                onDismiss={() => setIsOpen(false)}
+                onSubmit={({ contentFragments, domainName, tenantInfo, repoId, deliveryRepos }) =>
+                    console.log('On Submit payload:', {
+                        contentFragments,
+                        domainName,
+                        tenantInfo,
+                        repoId,
+                        deliveryRepos,
+                    })
+                }
+                onSelectionChange={({
+                    contentFragments,
+                    domainName,
+                    tenantInfo,
+                    repoId,
+                    deliveryRepos,
+                }) => {
+                    console.log('On selection change payload:', {
+                        contentFragments,
+                        domainName,
+                        tenantInfo,
+                        repoId,
+                        deliveryRepos,
+                    });
+                }}
+            />
+        </DialogTrigger>
     );
 };
 ```
@@ -421,6 +462,7 @@ Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING
 This project is licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.
 
 <!-- links -->
+
 [aem-headless]: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/headless/introduction
 [microfrontend-wiki]: https://en.wikipedia.org/wiki/Microfrontend
 [import-maps-wiki]: https://github.com/WICG/import-maps

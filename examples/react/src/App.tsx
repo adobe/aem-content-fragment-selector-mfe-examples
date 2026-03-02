@@ -10,15 +10,22 @@
  * governing permissions and limitations under the License.
  */
 
-import {useState} from 'react'
-import {View, Button, Text, Flex} from '@adobe/react-spectrum'
+import { Provider, defaultTheme } from '@adobe/react-spectrum';
+import { Provider as ProviderS2 } from '@react-spectrum/s2';
 
-export default function SelectorView() {
-    const [isOpen, setIsOpen] = useState(false)
+import EnvironmentProvider from './EnvironmentProvider';
+import SelectorView from './Selector';
 
+function App() {
     return (
-        <View>
-            <Button onPress={() => setIsOpen(true)}>Show Selector</Button>
-        </View>
-    )
+        <Provider theme={defaultTheme} colorScheme="light" height="100%">
+            <ProviderS2 colorScheme="light">
+                <EnvironmentProvider>
+                    <SelectorView colorScheme="light" />
+                </EnvironmentProvider>
+            </ProviderS2>
+        </Provider>
+    );
 }
+
+export default App;
