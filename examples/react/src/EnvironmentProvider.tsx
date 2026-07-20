@@ -25,7 +25,11 @@ interface ImsAuthInfo {
 }
 
 interface ImsAuthService {
+    isSignedInUser: () => boolean;
+    getImsToken: () => string | undefined;
+    signIn: () => Promise<void>;
     signOut: () => void;
+    refreshToken: () => Promise<string | undefined>;
 }
 
 interface EnvironmentContextValue {

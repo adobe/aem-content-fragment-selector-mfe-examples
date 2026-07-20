@@ -10,7 +10,10 @@
     },
     "dependencies": {
         "@adobe/react-spectrum": "^3.25.1",
+        "@aem-sites/content-fragment-creator": "^1.1.0",
+        "@assets/microfrontend": "^0.19.2",
         "@react-spectrum/s2": "^0.10.1",
+        "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     },

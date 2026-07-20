@@ -1,30 +1,44 @@
-## Content Fragment Selector
+## Content Fragment Selector & Creator
 
-Content Fragment Selector is a Content Fragments Console component from [Adobe Experience Manager as a Headless CMS][aem-headless] (AEM CS). This components follows the [Micro Frontend architecture][microfrontend-wiki] and is consumable in your application via convenient JavaScript APIs to search for, filter and select content fragments available in the AEM CS repository.
+Content Fragment Selector and Content Fragment Creator are Content Fragments Console components from [Adobe Experience Manager as a Headless CMS][aem-headless] (AEM CS). Both follow the [Micro Frontend architecture][microfrontend-wiki] and are consumable in your application via convenient JavaScript/React APIs — the Selector to search for, filter and select content fragments available in the AEM CS repository, and the Creator to create new content fragments.
+
+These two components ship as separate, independently versioned npm packages:
+
+| Package | Description | Consumable from |
+|---|---|---|
+| [`@aem-sites/content-fragment-selector`](#content-fragment-selector) | Search, filter, and select content fragments. | Vanilla JS (UMD/ESM CDN) or React |
+| [`@aem-sites/content-fragment-creator`](#content-fragment-creator) | Dialog for creating a new content fragment (title, optional description, optional model). | React only |
 
 ## Contents
 
 - [What is this repository for](#what-is-this-repository-for)
-- [Installation](#installation)
-- [APIs](#apis)
-    - [PureJSContentFragmentSelectors.`renderContentFragmentSelector` or `<ContentFragmentSelector/>`](#purejscontentfragmentselectorsrendercontentfragmentselector-or-contentfragmentselector)
-    - [PureJSContentFragmentSelectors.`renderContentFragmentSelectorWithAuthFlow` or `<ContentFragmentSelectorWithAuthFlow/>`](#purejscontentfragmentselectorsrendercontentfragmentselectorwithauthflow-or-contentfragmentselectorwithauthflow-)
-    - [PureJSContentFragmentSelectors.`registerContentFragmentSelectorAuthService`](#purejscontentfragmentselectorsregistercontentfragmentselectorauthservice)
-- [Examples](#examples)
-    - [JavaScript - UMD](#example---javascript)
-    - [JavaScript - ESM](#example---importmap-via-esm-cdn)
-    - [React](#example---react-with-importmap-via-esm-cdn)
-- Supported Properties
-    - [ContentFragmentSelector Props](./docs/ContentFragmentSelectorProps.md)
-    - [ContentFragmentSelection Type](./docs/ContentFragmentSelection.md)
-    - [ImsAuthProps](./docs/ImsAuthProps.md)
-    - [ImsAuthService](./docs/ImsAuthService.md)
+- [Content Fragment Selector](#content-fragment-selector)
+    - [Installation](#installation)
+    - [APIs](#apis)
+        - [PureJSContentFragmentSelectors.`renderContentFragmentSelector` or `<ContentFragmentSelector/>`](#purejscontentfragmentselectorsrendercontentfragmentselector-or-contentfragmentselector)
+        - [PureJSContentFragmentSelectors.`renderContentFragmentSelectorWithAuthFlow` or `<ContentFragmentSelectorWithAuthFlow/>`](#purejscontentfragmentselectorsrendercontentfragmentselectorwithauthflow-or-contentfragmentselectorwithauthflow-)
+        - [PureJSContentFragmentSelectors.`registerContentFragmentSelectorAuthService`](#purejscontentfragmentselectorsregistercontentfragmentselectorauthservice)
+    - [Examples](#examples)
+        - [JavaScript - UMD](#example---javascript)
+        - [JavaScript - ESM](#example---importmap-via-esm-cdn)
+        - [React](#example---react-with-importmap-via-esm-cdn)
+    - Supported Properties
+        - [ContentFragmentSelector Props](./docs/ContentFragmentSelectorProps.md)
+        - [ContentFragmentSelection Type](./docs/ContentFragmentSelection.md)
+        - [ImsAuthProps](./docs/ImsAuthProps.md)
+        - [ImsAuthService](./docs/ImsAuthService.md)
+- [Content Fragment Creator](#content-fragment-creator)
+    - [Installation](#installation-content-fragment-creator)
+    - [Example - React](#example---react-content-fragment-creator)
+    - [CreateContentFragmentDialog Props](./docs/CreateContentFragmentDialogProps.md)
 - [Contributing](#contributing)
 - [Licensing](#licensing)
 
 ## What is this repository for
 
-This GitHub repository contains usage examples for the Content Fragment Selectors' JavaScript APIs in various frameworks/libraries like Vanilla JavaScript and React. The JavaScript APIs enable you to conveniently integrate the Content Fragment Selector, which is a component from Adobe Experience Manager as a Headless CMS (AEM CS) into your application and support functions such as searching, browsing, filtering, selecting content fragments from the AEM CS repository and more.
+This GitHub repository contains usage examples for the Content Fragment Selector's and Content Fragment Creator's JavaScript/React APIs in various frameworks/libraries like Vanilla JavaScript and React. These APIs enable you to conveniently integrate the Content Fragment Selector and Content Fragment Creator, which are components from Adobe Experience Manager as a Headless CMS (AEM CS), into your application and support functions such as searching, browsing, filtering, selecting, and creating content fragments from the AEM CS repository.
+
+## Content Fragment Selector
 
 ![content-fragment-selector-high-level-flow](./docs/content-fragment-selector-flow.png)
 
@@ -259,6 +273,7 @@ const TestComponent = () => {
             <ActionButton onPress={() => setIsOpen(true)}>Show Fragment Selector</ActionButton>
             <ContentFragmentSelector
                 ref={selectorInstance}
+                apiKey="your-analytics-api-key"
                 orgId={imsOrg}
                 imsToken={imsToken}
                 repoId={repoId}
@@ -267,40 +282,47 @@ const TestComponent = () => {
                     'author-p11111-e22222.adobeaemcloud.com',
                 ]}
                 defaultRepoId="default-repo-id"
+                // Optional list of AMS (non-cloud) repositories to add to the repository picker.
+                amsRepositories={[{ label: 'My AMS Repo', value: 'my-ams-repo-id' }]}
                 locale="en-US"
                 env="PROD"
                 isOpen={isOpen}
+                // Plain values still work — only wrap a value in
+                // `{ value, readonly: true }` when you want the user to be
+                // unable to remove it from the active filters.
                 filters={{
                     folder: '/content/dam',
-                    status: ['PUBLISHED', 'MODIFIED'],
+                    status: [{ value: 'PUBLISHED', readonly: true }, 'MODIFIED'],
                     tag: [
                         {
-                            id: '1:',
-                            name: '1',
-                            path: '/content/cq:tags/1',
-                            description: '',
+                            value: {
+                                id: '1:',
+                                name: '1',
+                                path: '/content/cq:tags/1',
+                                description: '',
+                            },
+                            readonly: true,
                         },
                     ],
                 }}
-                readonlyFilters={[
-                    { status: ['PUBLISHED', 'MODIFIED'] },
-                    {
-                        tag: [
-                            {
-                                id: '1:',
-                                name: '1',
-                            },
-                        ],
-                    },
-                ]}
+                // Per-repository filter overrides — fully replaces `filters` for that repo id.
+                repoFilters={{
+                    'author-p11111-e22222.adobeaemcloud.com': { status: ['DRAFT'] },
+                }}
                 selectedFragments={[{ id: 'fragment1', path: '/content/dam/fragment1' }]}
                 noWrap={false}
                 theme="light"
                 selectionType="multiple"
+                maxItems={5}
                 dialogSize="fullscreen"
                 hipaaEnabled={false}
                 inventoryView="table"
                 inventoryViewToggleEnabled={true}
+                selectFields={true}
+                // Adjusts the variation dropdown only — use `filters`/`repoFilters` for the main list.
+                variationsFilters={{ status: ['PUBLISHED'] }}
+                // Persists active filters/searches/repo selection to IndexedDB across loads.
+                rememberState={true}
                 onDismiss={() => setIsOpen(false)}
                 onSubmit={({ contentFragments, domainName, tenantInfo, repoId, deliveryRepos }) =>
                     console.log('On Submit payload:', {
@@ -334,6 +356,8 @@ const TestComponent = () => {
 
 #### `ContentFragmentSelectorWithAuthFlow` React Component Usage
 
+`ContentFragmentSelectorWithAuthFlow` includes its own built-in sign-in flow, so you don't need to trigger authentication yourself before rendering it — it will prompt the user to sign in if there is no valid `imsToken` yet. It's still recommended to call [`registerContentFragmentSelectorAuthService`](#purejscontentfragmentselectorsregistercontentfragmentselectorauthservice) once (e.g. on mount) so the resulting `ImsAuthService` instance is available application-wide (see [ImsAuthService](./docs/ImsAuthService.md)).
+
 ```javascript
 const TestComponent = () => {
     const repoId = 'author-p12345-e67890.adobeaemcloud.com';
@@ -343,73 +367,69 @@ const TestComponent = () => {
     const imsSusiData = {
         imsClientId: '<IMS_CLIENT_ID>',
         imsScope: 'AdobeID,openid,read_organizations,additional_info.projectedProductContext',
-        redirectUrl: window.location.href,
-        adobeImsOptions: {
-            useLocalStorage: true,
-        },
+        redirectUri: window.location.href,
         modalMode: true,
         env: 'PROD',
     };
 
-    const { imsAuthService } = useImsAuthFlow({ ...imsSusiData });
+    // Recommended: register once (e.g. on mount) — see registerContentFragmentSelectorAuthService
+    useEffect(() => {
+        registerContentFragmentSelectorAuthService(imsSusiData);
+    }, []);
 
     return (
         <DialogTrigger type="fullscreen" isOpen={isOpen}>
-            <ActionButton
-                onPress={async () => {
-                    try {
-                        await imsAuthService?.triggerAuthFlow().then(() => {
-                            setIsOpen(true);
-                        });
-                    } catch (error) {
-                        console.error('Error signing in: ', error);
-                    }
-                }}
-            >
-                Show Selector
-            </ActionButton>
+            <ActionButton onPress={() => setIsOpen(true)}>Show Selector</ActionButton>
             <ContentFragmentSelectorWithAuthFlow
+                apiKey="your-analytics-api-key"
                 repoId={repoId}
                 allowedRepositoryIds={[
                     'author-p12345-e67890.adobeaemcloud.com',
                     'author-p11111-e22222.adobeaemcloud.com',
                 ]}
                 defaultRepoId="default-repo-id"
+                // Optional list of AMS (non-cloud) repositories to add to the repository picker.
+                amsRepositories={[{ label: 'My AMS Repo', value: 'my-ams-repo-id' }]}
                 orgId={orgId}
                 locale="en-US"
                 env="PROD"
                 isOpen={isOpen}
+                // Plain values still work — only wrap a value in
+                // `{ value, readonly: true }` when you want the user to be
+                // unable to remove it from the active filters.
                 filters={{
                     folder: '/content/dam',
-                    status: ['PUBLISHED', 'MODIFIED'],
+                    status: [{ value: 'PUBLISHED', readonly: true }, 'MODIFIED'],
                     tag: [
                         {
-                            id: '1:',
-                            name: '1',
-                            path: '/content/cq:tags/1',
-                            description: '',
+                            value: {
+                                id: '1:',
+                                name: '1',
+                                path: '/content/cq:tags/1',
+                                description: '',
+                            },
+                            readonly: true,
                         },
                     ],
                 }}
-                readonlyFilters={[
-                    { status: ['PUBLISHED', 'MODIFIED'] },
-                    {
-                        tag: [
-                            {
-                                id: '1:',
-                                name: '1',
-                            },
-                        ],
-                    },
-                ]}
+                // Per-repository filter overrides — fully replaces `filters` for that repo id.
+                repoFilters={{
+                    'author-p11111-e22222.adobeaemcloud.com': { status: ['DRAFT'] },
+                }}
                 selectedFragments={[{ id: 'fragment1', path: '/content/dam/fragment1' }]}
                 noWrap={false}
                 theme="light"
                 selectionType="multiple"
+                maxItems={5}
                 dialogSize="fullscreen"
                 hipaaEnabled={false}
                 inventoryView="table"
                 inventoryViewToggleEnabled={true}
+                selectFields={true}
+                // Adjusts the variation dropdown only — use `filters`/`repoFilters` for the main list.
+                variationsFilters={{ status: ['PUBLISHED'] }}
+                // Persists active filters/searches/repo selection to IndexedDB across loads.
+                rememberState={true}
                 onDismiss={() => setIsOpen(false)}
                 onSubmit={({ contentFragments, domainName, tenantInfo, repoId, deliveryRepos }) =>
                     console.log('On Submit payload:', {
@@ -450,6 +470,74 @@ For complete type definitions and properties, see [ContentFragmentSelection Type
 ### Accepted `props`
 
 For a complete and up-to-date list of all supported properties, their types, defaults, and descriptions, see the [Content Fragment Selector Props documentation](./docs/ContentFragmentSelectorProps.md).
+
+<br/>
+
+---
+
+## Content Fragment Creator
+
+`@aem-sites/content-fragment-creator` is a separate npm package that provides the **Create Content Fragment Dialog** (`CreateContentFragmentDialog`) — for creating new content fragments (title, optional description, optional model). Use it when your app needs to create fragments, for example from an inventory view or an editor. It has its own version and release cycle, independent of `@aem-sites/content-fragment-selector`.
+
+<img width="524" alt="Create Content Fragment Dialog" src="./docs/content-fragment-creator-demo.png">
+
+> **Note:** Unlike the Content Fragment Selector, the Content Fragment Creator is currently **React only** — it does not ship a UMD/Vanilla JS build, so it cannot be loaded via a `<script>` tag or ESM CDN import map. It must be installed as an npm dependency in a React application.
+
+### Installation (Content Fragment Creator) {#installation-content-fragment-creator}
+
+```bash
+npm install @aem-sites/content-fragment-creator
+# OR
+yarn add @aem-sites/content-fragment-creator
+```
+
+`@aem-sites/content-fragment-creator` also requires the following peer dependencies to be installed alongside it: `react`, `react-dom`, `prop-types`, `@adobe/react-spectrum`, and `@assets/microfrontend` (the Micro Frontend embed library used to load the dialog).
+
+### Example - React (Content Fragment Creator) {#example---react-content-fragment-creator}
+
+Unlike `ContentFragmentSelectorWithAuthFlow`, `CreateContentFragmentDialog` does **not** include a built-in sign-in flow — it expects a valid `imsToken` to already be available (for example, from an `ImsAuthService` you registered separately, or from your host application's own auth).
+
+```javascript
+import {
+    CreateContentFragmentDialog,
+    type CreateContentFragmentDialogProps,
+} from '@aem-sites/content-fragment-creator';
+
+const MyComponent = () => {
+    const [open, setOpen] = React.useState(false);
+    const repoId = 'author-p12345-e67890.adobeaemcloud.com';
+    // Obtain this from your own auth flow (e.g. an ImsAuthService instance) —
+    // CreateContentFragmentDialog does not fetch a token for you.
+    const imsToken = getImsTokenFromYourAuthFlow();
+
+    const onCreate = (contentFragment) => {
+        console.log('Created content fragment:', contentFragment);
+        // Handle the created content fragment (e.g., update state, show a message, etc.)
+    };
+
+    return (
+        <>
+            <button onClick={() => setOpen(true)}>Create fragment</button>
+            <CreateContentFragmentDialog
+                open={open}
+                onDismiss={() => setOpen(false)}
+                repoId={repoId}
+                imsToken={imsToken}
+                orgId="YOUR_ORG_ID@AdobeOrg"
+                locale="en-US"
+                selectedFolder="/content/dam/myfolder"
+                onCreate={onCreate}
+            />
+        </>
+    );
+};
+```
+
+For a complete, runnable version of this example — including obtaining the `imsToken` from an already-registered `ImsAuthService` before opening the dialog — see [`Creator.tsx`](./examples/react/src/Creator.tsx) and [`ContentFragmentCreatorWrapper.tsx`](./examples/react/src/ContentFragmentCreatorWrapper.tsx) in the [React demo](./examples/react). The dialog is rendered via the `@assets/microfrontend` embed (iframe).
+
+### Accepted `props` (Content Fragment Creator)
+
+For a complete and up-to-date list of all supported properties, their types, defaults, and descriptions, see the [CreateContentFragmentDialog Props documentation](./docs/CreateContentFragmentDialogProps.md).
 
 <br/>
 
