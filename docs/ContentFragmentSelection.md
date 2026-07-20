@@ -25,6 +25,8 @@ type ContentFragmentSelection = {
     createdBy: string;
     createdByFullName: string;
     createdDate: number;
+    selectedFields?: Record<string, unknown>;
+    selectedTemplateId?: string | null;
 }[];
 ```
 
@@ -60,6 +62,8 @@ type ContentFragmentModel = {
 | `createdBy`           | string               | Yes      | Email/username of the user who created the fragment                                                                                |
 | `createdByFullName`   | string               | Yes      | Full name of the user who created the fragment                                                                                     |
 | `createdDate`         | number               | Yes      | Timestamp (in milliseconds) when the fragment was created                                                                          |
+| `selectedFields`      | `Record<string, unknown>` | No | Map of field-name → field-value for the fields the user picked in the field-selection step. Keys are field names; **values mirror the underlying `ContentFragmentField["values"]` array** — i.e. each value is an array of primitives (`string[]`, `boolean[]`, `number[]`, …) whose element type depends on the field's model type. Present only when the selector was opened with `selectFields={true}` **and** the user picked at least one field for this fragment; omitted otherwise. |
+| `selectedTemplateId`  | `string \| null`     | No       | Id of the HTML template chosen for this fragment in the Quick Details panel's template picker. `null` means the generic (default) template was explicitly selected — a real selection that is forwarded. The key is **omitted entirely** when nothing was chosen (e.g. the template picker was never opened for this fragment, or the feature toggle gating the picker is off). |
 
 ### ContentFragmentModel Properties
 
@@ -96,6 +100,16 @@ PureJSContentFragmentSelectors.renderContentFragmentSelectorWithAuthFlow(contain
             console.log('Created By:', fragment.createdBy);
             console.log('Created By Full Name:', fragment.createdByFullName);
             console.log('Created Date:', new Date(fragment.createdDate));
+            // Only present when the selector was opened with `selectFields={true}`
+            // and the user picked at least one field for this fragment.
+            if (fragment.selectedFields) {
+                console.log('Selected Fields:', fragment.selectedFields);
+            }
+            // Only present when a template was chosen in the Quick Details panel;
+            // `null` means the generic (default) template was picked.
+            if (fragment.selectedTemplateId !== undefined) {
+                console.log('Selected Template Id:', fragment.selectedTemplateId);
+            }
         });
     },
 });

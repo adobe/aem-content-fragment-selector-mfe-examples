@@ -10,18 +10,29 @@
  * governing permissions and limitations under the License.
  */
 
-import { Provider, defaultTheme } from '@adobe/react-spectrum';
+import { Provider, defaultTheme, Flex, Heading, Divider } from '@adobe/react-spectrum';
 import { Provider as ProviderS2 } from '@react-spectrum/s2';
 
 import EnvironmentProvider from './EnvironmentProvider';
 import SelectorView from './Selector';
+import CreatorView from './Creator';
 
 function App() {
     return (
         <Provider theme={defaultTheme} colorScheme="light" height="100%">
             <ProviderS2 colorScheme="light">
                 <EnvironmentProvider>
-                    <SelectorView colorScheme="light" />
+                    <Flex direction="column" gap="size-200">
+                        <Heading level={2} marginStart="size-400">
+                            @aem-sites/content-fragment-selector
+                        </Heading>
+                        <SelectorView colorScheme="light" />
+                        <Divider size="M" />
+                        <Heading level={2} marginStart="size-400">
+                            @aem-sites/content-fragment-creator
+                        </Heading>
+                        <CreatorView />
+                    </Flex>
                 </EnvironmentProvider>
             </ProviderS2>
         </Provider>
