@@ -51,7 +51,7 @@ type ContentFragmentModel = {
 | `path`                | string               | Yes      | Full path to the fragment in the DAM (e.g., `/content/dam/my-project/article-fragment`)                                            |
 | `title`               | string               | Yes      | Display title of the content fragment                                                                                              |
 | `model`               | ContentFragmentModel | Yes      | Complete Content Fragment Model information                                                                                        |
-| `variations`          | string[]             | Yes      | Array of variation names available for this fragment (e.g., `["master", "mobile", "tablet"]`) |
+| `variations`          | string[]             | Yes      | Array of selected variation names for this fragment. Returns `[]` if the main variation is selected (e.g., `["mobile", "tablet"]`) |
 | `status`              | string               | Yes      | Publication status of the fragment (e.g., "PUBLISHED", "MODIFIED", "DRAFT", "NEW", "UNPUBLISHED")                                  |
 | `publishedBy`         | string               | Yes      | Email/username of the user who published the fragment                                                                              |
 | `publishedByFullName` | string               | Yes      | Full name of the user who published the fragment                                                                                   |
