@@ -30,6 +30,7 @@ These two components ship as separate, independently versioned npm packages:
 - [Content Fragment Creator](#content-fragment-creator)
     - [Installation](#installation-content-fragment-creator)
     - [Example - React](#example---react-content-fragment-creator)
+    - [Example - Host-owned dialog (noWrap)](#example---host-owned-dialog-nowrap)
     - [CreateContentFragmentDialog Props](./docs/CreateContentFragmentDialogProps.md)
 - [Contributing](#contributing)
 - [Licensing](#licensing)
@@ -534,6 +535,108 @@ const MyComponent = () => {
 ```
 
 For a complete, runnable version of this example — including obtaining the `imsToken` from an already-registered `ImsAuthService` before opening the dialog — see [`Creator.tsx`](./examples/react/src/Creator.tsx) and [`ContentFragmentCreatorWrapper.tsx`](./examples/react/src/ContentFragmentCreatorWrapper.tsx) in the [React demo](./examples/react). The dialog is rendered via the `@assets/microfrontend` embed (iframe).
+
+### Example - Host-owned dialog (noWrap) {#example---host-owned-dialog-nowrap}
+
+By default, `CreateContentFragmentDialog` renders its own full-viewport modal with a heading and action buttons. If your app needs to wrap the form in its own dialog (for example, to match your app's modal behavior or to avoid stacking issues with other page elements), set `noWrap`. The component then renders only the form fields, and your app owns the dialog chrome and the buttons:
+
+- `onStateChange` tells you which step is showing (`"form"` or `"pickPath"`) and whether its buttons should be enabled.
+- The component ref (`CreateContentFragmentDialogRef`) lets your buttons drive the dialog: `submit()`, `submit(true)` ("Create and open"), `confirmDestination()` and `cancelDestination()`.
+
+```javascript
+import {
+    Button,
+    ButtonGroup,
+    Content,
+    Dialog,
+    DialogContainer,
+    Divider,
+    Heading,
+} from '@adobe/react-spectrum';
+import {
+    CreateContentFragmentDialog,
+    type CreateContentFragmentDialogRef,
+} from '@aem-sites/content-fragment-creator';
+
+const initialState = { step: 'form', isValid: false, isPending: false, isPathValid: false };
+
+const MyComponent = ({ imsToken, repoId }) => {
+    const [open, setOpen] = React.useState(false);
+    const [state, setState] = React.useState(initialState);
+    const dialogRef = React.useRef<CreateContentFragmentDialogRef>(null);
+
+    const close = () => {
+        setOpen(false);
+        setState(initialState);
+    };
+
+    return (
+        <>
+            <Button onPress={() => setOpen(true)}>Create fragment</Button>
+            <DialogContainer onDismiss={close}>
+                {open && (
+                    <Dialog size="M">
+                        <Heading>New Content Fragment</Heading>
+                        <Divider />
+                        <Content>
+                            <CreateContentFragmentDialog
+                                ref={dialogRef}
+                                noWrap
+                                open={open}
+                                imsToken={imsToken}
+                                repoId={repoId}
+                                onStateChange={setState}
+                                onDismiss={close}
+                                onCreate={(contentFragment) => {
+                                    console.log('Created content fragment:', contentFragment);
+                                    close();
+                                }}
+                            />
+                        </Content>
+                        {state.step === 'pickPath' ? (
+                            <ButtonGroup>
+                                <Button
+                                    variant="secondary"
+                                    onPress={() => dialogRef.current?.cancelDestination()}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant="cta"
+                                    isDisabled={!state.isPathValid}
+                                    onPress={() => dialogRef.current?.confirmDestination()}
+                                >
+                                    Choose
+                                </Button>
+                            </ButtonGroup>
+                        ) : (
+                            <ButtonGroup>
+                                <Button variant="secondary" onPress={close}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant="cta"
+                                    isDisabled={!state.isValid || state.isPending}
+                                    onPress={() => dialogRef.current?.submit()}
+                                >
+                                    Create
+                                </Button>
+                                <Button
+                                    variant="cta"
+                                    isDisabled={!state.isValid || state.isPending}
+                                    onPress={() => dialogRef.current?.submit(true)}
+                                >
+                                    Create and open
+                                </Button>
+                            </ButtonGroup>
+                        )}
+                    </Dialog>
+                )}
+            </DialogContainer>
+        </>
+    );
+};
+```
 
 ### Accepted `props` (Content Fragment Creator)
 
